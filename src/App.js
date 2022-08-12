@@ -34,20 +34,34 @@ function App() {
 	};
 
 	const onClick = (e) => {
-		const coordX = e.nativeEvent.offsetX;
-		const coordY = e.nativeEvent.offsetY;
+		const div = document.querySelector('.clickable-div');
+		const coordX = e.clientX;
+		const coordY = e.clientY;
 		console.log('X:' + e.clientX);
 		console.log('Y:' + e.clientY);
+		
 
-		document.querySelector('.clickable-div').style.setProperty('--x', e.clientX + 'px');
-		document.querySelector('.clickable-div').style.setProperty('--y', e.clientY + 'px');
+		div.style.left = coordX - div.offsetWidth / 2 + 'px';
+		div.style.top = coordY - div.offsetHeight / 2 + 'px';
 
 		if (auth.currentUser) {
 			playerSelection(coordX, coordY, id);
 		} else {
-			alert('Please log in. Thank you.');
+			//alert('Please log in. Thank you.');
 		}
 	};
+
+	return (
+		<div className="app-container">
+			<Header />
+			<img className="photo" onClick={onClick} src={require('./images/background.png')} alt="game" />
+			<div className="clickable-div" />
+			<ModalStart />
+		</div>
+	);
+}
+
+export default App;
 
 	/*let zoom = 1;
   const ZOOM_SPEED = 0.1;
@@ -61,15 +75,3 @@ useEffect(() => {
       }
     })
   }, [zoom])*/
-
-	return (
-		<div className="app-container">
-			<Header />
-			<img className="photo" onClick={onClick} src={require('./images/background.png')} alt="game" />
-			<div className="clickable-div" />
-			<ModalStart />
-		</div>
-	);
-}
-
-export default App;
