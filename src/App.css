@@ -23,8 +23,8 @@ html, body, .container, #root {
   position: absolute; 
   top: 0; 
   left: 0;
-  border: 2px solid red;
-  height: 25px;
-  width: 25px;
+  background-color: white;
+  height: 5rem;
+  width: 5rem;
   overflow: auto;
 }

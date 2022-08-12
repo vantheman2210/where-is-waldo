@@ -2,15 +2,22 @@ import './App.css';
 import Header from './components/Header';
 import { useEffect, useState } from 'react';
 import { db } from './Firebase';
-import { collection, addDoc, getDocs  } from 'firebase/firestore';
+import { collection, addDoc, getDocs, where } from 'firebase/firestore';
 import { auth } from './Firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import ModalStart from './components/ModalStart';
 import playerSelectionHandler from './helper/playerSelection';
 
-
 function App() {
 	const [ id, setId ] = useState('');
+	const [ items, setItems ] = useState([]);
+
+	useEffect(
+		() => {
+			console.log(items);
+		},
+		[ items ]
+	);
 
 	const playerSelection = async (coord1, coord2, id) => {
 		await addDoc(collection(db, 'player-selection'), playerCoords(coord1, coord2, id));
@@ -50,32 +57,41 @@ function App() {
 		div.style.top = coordY - div.offsetHeight / 2 + 'px';
 		*/
 
+		await checkSelection(coordX, coordY);
+	};
+
+	const checkSelection = async (coordX, coordY) => {
 		if (auth.currentUser) {
 			playerSelection(coordX, coordY, id);
 			const checkData = await getItemCoords();
-			 
-			const isItemFound = checkData[0].some((char) => 
-			return char
-			)
-			console.log(checkData[0].coordX)
-			console.log(playerSelectionHandler(coordX, checkData[0].coordX)) 
-			console.log(playerSelectionHandler(coordY, checkData[0].coordY))
+			setItems(checkData);
+			const isItemFound = checkData.some(
+				(item) => playerSelectionHandler(coordX, item.coordX) && playerSelectionHandler(coordY, item.coordY)
+			);
+
+			if (isItemFound) {
+				console.log('item found');
+			}
 		} else {
-			//alert('Please log in. Thank you.');
+			console.log('Please log in. Thank you.');
 		}
 	};
 
-	const getItemCoords = async () => { 
-		const data = await getDocs(collection(db, "items"));
-		const items = data.docs.map((doc) => doc = doc.data())
+	const getItemCoords = async () => {
+		const data = await getDocs(collection(db, 'items'));
+		const items = data.docs.map((doc) => (doc = doc.data()));
 		return items;
-	} 
+	};
 
 	return (
 		<div className="app-container">
 			<Header />
 			<img className="photo" onClick={onClick} src={require('./images/background.png')} alt="game" />
-			<div className="clickable-div" />
+			<div className="clickable-div">
+				{items.map((item, i) => {
+					return <p key={i}>{item.item}</p>;
+				})}
+			</div>
 			<ModalStart />
 		</div>
 	);
