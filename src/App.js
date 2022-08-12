@@ -1,33 +1,34 @@
 import './App.css';
 import Header from './components/Header';
 import { useEffect } from 'react';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import { db } from './Firebase';
+import { collection, addDoc } from "firebase/firestore";
+import ModalStart from './components/ModalStart';
 
 
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-	apiKey: 'AIzaSyCxWd8juDCrf7kv7hzfd4Cv_3f6v2txElQ',
-	authDomain: 'waldo-app-34031.firebaseapp.com',
-	projectId: 'waldo-app-34031',
-	storageBucket: 'waldo-app-34031.appspot.com',
-	messagingSenderId: '287421846194',
-	appId: '1:287421846194:web:8472d8a06b2a2899552fab'
+const playerSelection = async (coord1, coord2) => { 
+	 await addDoc(collection(db, 'player-selection'), (playerCoords(coord1, coord2)))
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const playerCoords = (coord1, coord2) => { 
+	return { 
+		coordX: coord1, 
+		coordY: coord2
+	}
+};
 
 function App() {
 	const onClick = (e) => {
 
-		console.log('X:' + e.nativeEvent.offsetX);
-    console.log('Y:' +e.nativeEvent.offsetY);
+		const coordX = e.nativeEvent.offsetX; 
+		const coordY = e.nativeEvent.offsetY;
+		console.log('X:' + e.clientX);
+    console.log('Y:' +e.clientY);
 		
 		document.querySelector('.clickable-div').style.setProperty('--x', e.clientX + 'px');
 		document.querySelector('.clickable-div').style.setProperty('--y', e.clientY + 'px');
+
+		playerSelection(coordX, coordY)
 		
 	};
 
@@ -49,6 +50,7 @@ useEffect(() => {
 			<Header />
 			<img className="photo" onClick={onClick} src={require('./images/background.png')} alt="game" />
 			<div className="clickable-div" />
+			<ModalStart/>
 		</div>
 	);
 }

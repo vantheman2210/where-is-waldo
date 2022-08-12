@@ -1,12 +1,19 @@
-import { https, logger } from "firebase-functions";
+const functions = require('firebase-functions');
 
-import { initializeApp } from 'firebase-admin';
-initializeApp();
+const admin = require('firebase-admin');
+admin.initializeApp();
+const db = admin.firestore();
 
-export const helloWorld = https.onRequest((request, response) => {
-  console.log('hello')
-   logger.info("Hello logs!", {structuredData: true});
-   response.send("Hello from Firebase!");
- });
 
- helloWorld();
+
+ 
+ exports.testFunction = functions.firestore
+    .document('player-selection/{selection}').onCreate( (snap, context) => {
+      const newd = snap.data();
+
+      console.log(newd); 
+      console.log('Hello')
+      db.addDoc('collections')
+    });
+
+    
