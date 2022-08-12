@@ -2,10 +2,12 @@ import './App.css';
 import Header from './components/Header';
 import { useEffect, useState } from 'react';
 import { db } from './Firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs  } from 'firebase/firestore';
 import { auth } from './Firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import ModalStart from './components/ModalStart';
+import playerSelectionHandler from './helper/playerSelection';
+
 
 function App() {
 	const [ id, setId ] = useState('');
@@ -33,23 +35,41 @@ function App() {
 		};
 	};
 
-	const onClick = (e) => {
+	const onClick = async (e) => {
 		const div = document.querySelector('.clickable-div');
 		const coordX = e.clientX;
 		const coordY = e.clientY;
 		console.log('X:' + e.clientX);
 		console.log('Y:' + e.clientY);
-		
 
-		div.style.left = coordX - div.offsetWidth / 2 + 'px';
+		div.style.left = coordX + 'px';
+		div.style.top = coordY + 'px';
+
+		/*
+			div.style.left = coordX - div.offsetWidth / 2 + 'px';
 		div.style.top = coordY - div.offsetHeight / 2 + 'px';
+		*/
 
 		if (auth.currentUser) {
 			playerSelection(coordX, coordY, id);
+			const checkData = await getItemCoords();
+			 
+			const isItemFound = checkData[0].some((char) => 
+			return char
+			)
+			console.log(checkData[0].coordX)
+			console.log(playerSelectionHandler(coordX, checkData[0].coordX)) 
+			console.log(playerSelectionHandler(coordY, checkData[0].coordY))
 		} else {
 			//alert('Please log in. Thank you.');
 		}
 	};
+
+	const getItemCoords = async () => { 
+		const data = await getDocs(collection(db, "items"));
+		const items = data.docs.map((doc) => doc = doc.data())
+		return items;
+	} 
 
 	return (
 		<div className="app-container">
@@ -63,7 +83,7 @@ function App() {
 
 export default App;
 
-	/*let zoom = 1;
+/*let zoom = 1;
   const ZOOM_SPEED = 0.1;
 
 useEffect(() => { 
