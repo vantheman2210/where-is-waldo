@@ -24,5 +24,7 @@ html, body, .container, #root {
   background-color: white;
   height: fit-content;
   width: fit-content;
+  min-height: 1rem;
+  min-width: 1rem;
   overflow: auto;
 }
