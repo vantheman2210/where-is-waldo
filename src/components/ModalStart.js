@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/ModalStart.css'
 import { auth } from '../Firebase';
 import {
 	signInWithPopup,
@@ -22,6 +23,14 @@ const ModalStart = () => {
 			.catch((error) => {
 				console.log(error.code, error.message);
 			});
+	}; 
+
+	const signOut = () => {
+		console.log('-------singout-------');
+		console.log('logout');
+		
+		auth.signOut();
+	
 	};
 
 	const anonymousSignIn = () => {
@@ -59,8 +68,8 @@ const ModalStart = () => {
 		});
 	return (
 		<div className="modal-container">
-			<button onClick={signIn}>Log In</button>
-			<button onClick={anonymousSignIn}>Anonymous</button>
+			<button onClick={signIn}>Gmail</button>
+			<button onClick={anonymousSignIn}>Anonymous Log In</button>
 		</div>
 	);
 };

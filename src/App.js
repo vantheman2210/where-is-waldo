@@ -2,7 +2,7 @@ import './App.css';
 import Header from './components/Header';
 import { useEffect, useState } from 'react';
 import { db } from './Firebase';
-import { collection, addDoc, getDocs, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, where, getDoc, doc, updateDoc } from 'firebase/firestore';
 import { auth } from './Firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import ModalStart from './components/ModalStart';
@@ -44,10 +44,12 @@ function App() {
 
 	const onClick = async (e) => {
 		const div = document.querySelector('.clickable-div');
-		const coordX = e.clientX;
-		const coordY = e.clientY;
-		console.log('X:' + e.clientX);
-		console.log('Y:' + e.clientY);
+
+		const coordX = e.pageX;
+		const coordY = e.pageY;
+		console.log('X:' + coordX);
+		console.log('Y:' + coordY);
+		console.log(e.target.value)
 
 		div.style.left = coordX + 'px';
 		div.style.top = coordY + 'px';
@@ -66,16 +68,21 @@ function App() {
 			const checkData = await getItemCoords();
 			setItems(checkData);
 			const isItemFound = checkData.some(
-				(item) => playerSelectionHandler(coordX, item.coordX) && playerSelectionHandler(coordY, item.coordY)
+				(item) => playerSelectionHandler(coordX, item.coordX) || playerSelectionHandler(coordY, item.coordY)
 			);
 
 			if (isItemFound) {
 				console.log('item found');
+				updateItemFound();
 			}
 		} else {
 			console.log('Please log in. Thank you.');
 		}
 	};
+
+	const checkClick = (e) => { 
+		console.log(e.target)
+	}
 
 	const getItemCoords = async () => {
 		const data = await getDocs(collection(db, 'items'));
@@ -83,14 +90,24 @@ function App() {
 		return items;
 	};
 
+	const updateItemFound = async () => {
+		const item = doc(db, 'items', 'tpOz48g6OyRIRyJcrwXu')
+		const getItem = await updateDoc(item, {
+			found: true
+		});
+		
+	};
+
 	return (
 		<div className="app-container">
 			<Header />
-			<img className="photo" onClick={onClick} src={require('./images/background.png')} alt="game" />
-			<div className="clickable-div">
-				{items.map((item, i) => {
-					return <p key={i}>{item.item}</p>;
-				})}
+			<div>
+				<img className="photo" onClick={onClick} src={require('./images/background.png')} alt="game" />
+				<div className="clickable-div">
+					{items.map((item, i) => {
+						return <p onClick={checkClick} key={i}>{item.item}</p>;
+					})}
+				</div>
 			</div>
 			<ModalStart />
 		</div>
