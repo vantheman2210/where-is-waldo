@@ -2,7 +2,19 @@ import './App.css';
 import Header from './components/Header';
 import { useEffect, useState } from 'react';
 import { db } from './Firebase';
-import { collection, addDoc, getDocs, where, getDoc, doc, updateDoc, query, deleteDoc } from 'firebase/firestore';
+import {
+	collection,
+	addDoc,
+	getDocs,
+	where,
+	getDoc,
+	doc,
+	updateDoc,
+	query,
+	deleteDoc,
+	onSnapshot,
+	setDoc
+} from 'firebase/firestore';
 import { auth } from './Firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import ModalStart from './components/ModalStart';
@@ -23,6 +35,10 @@ function App() {
 		await addDoc(collection(db, 'player-selection'), playerCoords(coord1, coord2, id));
 	};
 
+	const createPlayerFoundList = async (item) => {
+		await addDoc(collection(db, 'items-found'), { item, id });
+	};
+
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
 			const uid = user.uid;
@@ -30,6 +46,7 @@ function App() {
 		} else {
 			// User is signed out
 			setId();
+
 			console.log('signed out');
 		}
 	});
@@ -49,7 +66,7 @@ function App() {
 		const coordY = e.pageY;
 		console.log('X:' + coordX);
 		console.log('Y:' + coordY);
-		console.log(items)
+		console.log(items);
 
 		div.style.left = coordX + 'px';
 		div.style.top = coordY + 'px';
@@ -62,40 +79,41 @@ function App() {
 		if (auth.currentUser) {
 			playerSelection(coordX, coordY, id);
 			setItems(await getItemCoords());
-			
 		} else {
-			console.log('not logged in')
+			console.log('not logged in');
 		}
 	};
 
 	const checkSelection = async (coordX, coordY, itemDrop) => {
 		if (auth.currentUser) {
-			
 			const checkData = await getItemCoords();
-			
+
 			const isItemFound = checkData.some(
 				(item) => playerSelectionHandler(coordX, item.coordX) || playerSelectionHandler(coordY, item.coordY)
 			);
 
 			if (!isItemFound) {
 				console.log('not found');
-				 await deletePlayerCoord();
+				await deletePlayerCoord();
 				return;
-			} 
+			}
 			console.log('item found');
-			updateItemFound(itemDrop)
-
+			console.log(itemDrop);
+			createPlayerFoundList(itemDrop);
+			updateItemFound(itemDrop);
 		} else {
 			console.log('Please log in. Thank you.');
 		}
 	};
 
-	const checkClick = async (e) => { 
+	const checkClick = async (e) => {
+		await isGameOver(id);
 		const item = e.target.textContent;
 		const coord = await getPlayerCoords();
-		console.log(coord)
+		console.log(coord);
+		console.log(item);
 		checkSelection(coord[0].coordX, coord[0].coordY, item);
-	}
+	};
 
 	const getItemCoords = async () => {
 		const data = await getDocs(collection(db, 'items'));
@@ -103,43 +121,55 @@ function App() {
 		return items;
 	};
 
-	const getPlayerCoords = async () => { 
-		const coordRef = collection(db, "player-selection"); 
-		const queryRef = query(coordRef, where("playerId", "==", id));
+	const getPlayerCoords = async () => {
+		const coordRef = collection(db, 'player-selection');
+		const queryRef = query(coordRef, where('playerId', '==', id));
 
 		const data = await getDocs(queryRef);
 
-		const coords = data.docs.map(doc => doc = doc.data());
-		
+		const coords = data.docs.map((doc) => (doc = doc.data()));
+
 		return coords;
-		
-	}
+	};
 
 	const updateItemFound = async (item) => {
-		
-		const itemRef = collection(db, "items"); 
-		const queryRef = query(itemRef, where("item", "==", item));
+		const itemRef = collection(db, 'items');
+		const queryRef = query(itemRef, where('item', '==', item));
 		const data = await getDocs(queryRef);
-		const getData = data.docs.map(doc => doc = doc.id).join()
-		console.log(getData)
-		const updateRef = doc(db, "items", getData)
+		const getData = data.docs.map((doc) => (doc = doc.id)).join();
+		console.log(getData);
+		const updateRef = doc(db, 'items', getData);
 		const getItem = await updateDoc(updateRef, {
 			found: true
 		});
-
 	};
 
-	const deletePlayerCoord = async () => { 
-		const coordRef = collection(db, "player-selection"); 
-		const queryRef = query(coordRef, where("playerId", "==", id));
+	const deletePlayerCoord = async () => {
+		const coordRef = collection(db, 'player-selection');
+		const queryRef = query(coordRef, where('playerId', '==', id));
 
 		const data = await getDocs(queryRef);
 
-		const docId = data.docs.map(doc => doc = doc.id);
+		const docId = data.docs.map((doc) => (doc = doc.id));
 
-		for(const docs of  docId) { 
-			await deleteDoc(doc(db, "player-selection", docs));
+		for (const docs of docId) {
+			await deleteDoc(doc(db, 'player-selection', docs));
 		}
+	};
+
+	const isGameOver = async (id) => {
+		const data = query(collection(db, 'items-found'), where('id', '==', id));
+		const queryData = await getDocs(data);
+
+		const getData = queryData.docs.map((doc) => doc.data().item);
+
+		const check = getData.includes('microwave' && 'toaster');
+
+		if (check) {
+			return console.log('game won');
+		}
+
+		return;
 	};
 
 	return (
@@ -149,7 +179,11 @@ function App() {
 				<img className="photo" onClick={onClick} src={require('./images/background.png')} alt="game" />
 				<div className="clickable-div">
 					{items.map((item, i) => {
-						return <p onClick={checkClick} key={i}>{item.item}</p>;
+						return (
+							<p onClick={checkClick} key={i}>
+								{item.item}
+							</p>
+						);
 					})}
 				</div>
 			</div>
