@@ -89,9 +89,10 @@ function App() {
 			const checkData = await getItemCoords();
 
 			const isItemFound = checkData.some(
-				(item) => playerSelectionHandler(coordX, item.coordX) || playerSelectionHandler(coordY, item.coordY)
+				(item) =>  playerSelectionHandler(coordX, item.coordX) || playerSelectionHandler(coordY, item.coordY)
+				
 			);
-
+console.log(isItemFound, checkData)
 			if (!isItemFound) {
 				console.log('not found');
 				await deletePlayerCoord();
@@ -100,6 +101,7 @@ function App() {
 			console.log('item found');
 			console.log(itemDrop);
 			createPlayerFoundList(itemDrop);
+			await deletePlayerCoord();
 			updateItemFound(itemDrop);
 		} else {
 			console.log('Please log in. Thank you.');
