@@ -13,12 +13,16 @@ import {
 	query,
 	deleteDoc,
 	onSnapshot,
-	setDoc
+	setDoc,
+	serverTimestamp,
+	Timestamp
 } from 'firebase/firestore';
+
 import { auth } from './Firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import ModalStart from './components/ModalStart';
 import playerSelectionHandler from './helper/playerSelection';
+import Leaderboard from './components/Leaderboard';
 
 function App() {
 	const [ id, setId ] = useState();
@@ -36,7 +40,11 @@ function App() {
 	};
 
 	const createPlayerFoundList = async (item) => {
-		await addDoc(collection(db, 'items-found'), { item, id });
+		await addDoc(collection(db, 'items-found'), { item, id, timestamp: serverTimestamp() });
+	};
+
+	const playerLeaderBoard = async (time) => {
+		await addDoc(collection(db, 'leaderboard'), { id, time });
 	};
 
 	onAuthStateChanged(auth, (user) => {
@@ -89,10 +97,9 @@ function App() {
 			const checkData = await getItemCoords();
 
 			const isItemFound = checkData.some(
-				(item) =>  playerSelectionHandler(coordX, item.coordX) || playerSelectionHandler(coordY, item.coordY)
-				
+				(item) => playerSelectionHandler(coordX, item.coordX) || playerSelectionHandler(coordY, item.coordY)
 			);
-console.log(isItemFound, checkData)
+			console.log(isItemFound, checkData);
 			if (!isItemFound) {
 				console.log('not found');
 				await deletePlayerCoord();
@@ -103,13 +110,13 @@ console.log(isItemFound, checkData)
 			createPlayerFoundList(itemDrop);
 			await deletePlayerCoord();
 			updateItemFound(itemDrop);
+			await isGameOver(id);
 		} else {
 			console.log('Please log in. Thank you.');
 		}
 	};
 
 	const checkClick = async (e) => {
-		await isGameOver(id);
 		const item = e.target.textContent;
 		const coord = await getPlayerCoords();
 		console.log(coord);
@@ -165,9 +172,16 @@ console.log(isItemFound, checkData)
 
 		const getData = queryData.docs.map((doc) => doc.data().item);
 
+		const getTime = queryData.docs.map((doc) => doc.data().timestamp);
+
 		const check = getData.includes('microwave' && 'toaster');
 
 		if (check) {
+			const time = (getTime[1].toMillis() - getTime[0].toMillis()) / 1000;
+			console.log((getTime[1].toMillis() - getTime[0].toMillis()) / 1000);
+
+			await playerLeaderBoard();
+
 			return console.log('game won');
 		}
 
@@ -190,6 +204,7 @@ console.log(isItemFound, checkData)
 				</div>
 			</div>
 			<ModalStart />
+			<Leaderboard />
 		</div>
 	);
 }
