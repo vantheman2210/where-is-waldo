@@ -9,16 +9,16 @@ const Leaderboard = () => {
   const getItemCoords = async () => {
 		const data = await getDocs(collection(db, 'leaderboard'));
 		const items = data.docs.map((doc) => (doc = doc.data()));
-		setLeaderboard(items)
+		return items;
 	};
   
   
 
   useEffect(() => { 
     const check = async() => { 
-      await getItemCoords();
+      setLeaderboard(await getItemCoords())
     }
-    check()
+     check()
    console.log(leaderboard)
     
   }, [])
@@ -26,7 +26,11 @@ const Leaderboard = () => {
 
   return (
     <div className="leaderboard-container">
-      { }
+      {leaderboard.map((player, i) => { 
+        return (
+          <p key={i}>{player.id}: {player.time}</p>
+        )
+      })}
     </div>
   )
 };

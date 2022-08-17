@@ -23,6 +23,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import ModalStart from './components/ModalStart';
 import playerSelectionHandler from './helper/playerSelection';
 import Leaderboard from './components/Leaderboard';
+import { Link } from 'react-router-dom';
 
 function App() {
 	const [ id, setId ] = useState();
@@ -39,6 +40,10 @@ function App() {
 		await addDoc(collection(db, 'player-selection'), playerCoords(coord1, coord2, id));
 	};
 
+	const addPlayer = async (id) => { 
+		await addDoc(collection(db, 'player'), {id, timestamp: serverTimestamp()});
+	}
+
 	const createPlayerFoundList = async (item) => {
 		await addDoc(collection(db, 'items-found'), { item, id, timestamp: serverTimestamp() });
 	};
@@ -51,6 +56,7 @@ function App() {
 		if (user) {
 			const uid = user.uid;
 			setId(uid);
+			addPlayer(uid);
 		} else {
 			// User is signed out
 			setId();
@@ -170,17 +176,23 @@ function App() {
 		const data = query(collection(db, 'items-found'), where('id', '==', id));
 		const queryData = await getDocs(data);
 
+		const data2 = query(collection(db, 'player'), where('id', '==', id));
+		const queryData2 = await getDocs(data2);
+
 		const getData = queryData.docs.map((doc) => doc.data().item);
 
-		const getTime = queryData.docs.map((doc) => doc.data().timestamp);
+		const getStartTime= queryData2.docs.map((doc) => doc.data().timestamp);
+
+		const getEndTime = queryData.docs.map((doc) => doc.data().timestamp);
 
 		const check = getData.includes('microwave' && 'toaster');
 
 		if (check) {
-			const time = (getTime[1].toMillis() - getTime[0].toMillis()) / 1000;
-			console.log((getTime[1].toMillis() - getTime[0].toMillis()) / 1000);
+			const time = ((getEndTime[0].toMillis() - getStartTime[1].toMillis()) / 1000);
+			console.log((getEndTime[0].toMillis() - getStartTime[1].toMillis()) / 1000)
+			console.log(time);
 
-			await playerLeaderBoard();
+			await playerLeaderBoard(time);
 
 			return console.log('game won');
 		}
@@ -204,7 +216,9 @@ function App() {
 				</div>
 			</div>
 			<ModalStart />
+			<Link>
 			<Leaderboard />
+			</Link>
 		</div>
 	);
 }
