@@ -1,5 +1,17 @@
 .modal-container { 
   display: flex;
+  justify-content: center;
+  position: absolute;
   flex-direction: column;
+  border: 1px solid white;
+  border-radius: 8px;
+  background: white;
   gap: 1rem;
+  padding: 2rem;
+  height: 10rem;
+  width: 7.5rem;
+}
+
+.modal-container-hide { 
+  display: none;
 }

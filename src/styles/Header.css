@@ -1,0 +1,7 @@
+.logOutBtn { 
+  display: none;
+}
+
+.logOutBtn-show { 
+  display: block;
+}

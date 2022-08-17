@@ -7,7 +7,9 @@ import {
 	signInAnonymously,
 	onAuthStateChanged,
 	setPersistence,
-	inMemoryPersistence
+	browserSessionPersistence,
+	inMemoryPersistence, 
+	
 } from 'firebase/auth';
 
 const ModalStart = () => {
@@ -25,14 +27,6 @@ const ModalStart = () => {
 			});
 	}; 
 
-	const signOut = () => {
-		console.log('-------singout-------');
-		console.log('logout');
-		
-		auth.signOut();
-	
-	};
-
 	const anonymousSignIn = () => {
 		signInAnonymously(auth)
 			.then(() => {
@@ -43,16 +37,21 @@ const ModalStart = () => {
 			});
 	};
 
+
+
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
 			// User is signed in, see docs for a list of available properties
 			// https://firebase.google.com/docs/reference/js/firebase.User
 			console.log(user.uid);
+			document.querySelector('.logOutBtn').style.display = 'block';
 			// ...
 		} else {
 			// User is signed out
 			console.log('signed out');
+			document.querySelector('.logOutBtn').style.display = 'none';
 		}
+		return;
 	});
 
 	setPersistence(auth, inMemoryPersistence)

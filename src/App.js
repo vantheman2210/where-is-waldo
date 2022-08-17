@@ -23,7 +23,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import ModalStart from './components/ModalStart';
 import playerSelectionHandler from './helper/playerSelection';
 import Leaderboard from './components/Leaderboard';
-import { Link } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
 	const [ id, setId ] = useState();
@@ -40,9 +40,9 @@ function App() {
 		await addDoc(collection(db, 'player-selection'), playerCoords(coord1, coord2, id));
 	};
 
-	const addPlayer = async (id) => { 
-		await addDoc(collection(db, 'player'), {id, timestamp: serverTimestamp()});
-	}
+	const addPlayer = async (id) => {
+		await addDoc(collection(db, 'player'), { id, timestamp: serverTimestamp() });
+	};
 
 	const createPlayerFoundList = async (item) => {
 		await addDoc(collection(db, 'items-found'), { item, id, timestamp: serverTimestamp() });
@@ -57,12 +57,15 @@ function App() {
 			const uid = user.uid;
 			setId(uid);
 			addPlayer(uid);
+			document.querySelector('.modal-container').classList.add('modal-container-hide');
 		} else {
 			// User is signed out
-			setId();
-
 			console.log('signed out');
+			document.querySelector('.modal-container').classList.remove('modal-container-hide');
+			setId();
+			return;
 		}
+		return;
 	});
 
 	const playerCoords = (coord1, coord2, id) => {
@@ -181,15 +184,15 @@ function App() {
 
 		const getData = queryData.docs.map((doc) => doc.data().item);
 
-		const getStartTime= queryData2.docs.map((doc) => doc.data().timestamp);
+		const getStartTime = queryData2.docs.map((doc) => doc.data().timestamp);
 
 		const getEndTime = queryData.docs.map((doc) => doc.data().timestamp);
 
 		const check = getData.includes('microwave' && 'toaster');
 
 		if (check) {
-			const time = ((getEndTime[0].toMillis() - getStartTime[1].toMillis()) / 1000);
-			console.log((getEndTime[0].toMillis() - getStartTime[1].toMillis()) / 1000)
+			const time = (getEndTime[0].toMillis() - getStartTime[1].toMillis()) / 1000;
+			console.log((getEndTime[0].toMillis() - getStartTime[1].toMillis()) / 1000);
 			console.log(time);
 
 			await playerLeaderBoard(time);
@@ -216,9 +219,6 @@ function App() {
 				</div>
 			</div>
 			<ModalStart />
-			<Link>
-			<Leaderboard />
-			</Link>
 		</div>
 	);
 }
