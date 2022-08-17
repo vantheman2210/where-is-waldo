@@ -7,15 +7,11 @@ import {
 	addDoc,
 	getDocs,
 	where,
-	getDoc,
 	doc,
 	updateDoc,
 	query,
 	deleteDoc,
-	onSnapshot,
-	setDoc,
-	serverTimestamp,
-	Timestamp
+	serverTimestamp
 } from 'firebase/firestore';
 
 import { auth } from './Firebase';

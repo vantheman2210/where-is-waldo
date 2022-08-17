@@ -7,7 +7,6 @@ import {
 	signInAnonymously,
 	onAuthStateChanged,
 	setPersistence,
-	browserSessionPersistence,
 	inMemoryPersistence, 
 	
 } from 'firebase/auth';
