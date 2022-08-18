@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../styles/ModalStart.css'
 import { auth } from '../Firebase';
 import {
@@ -35,23 +35,28 @@ const ModalStart = () => {
 				console.log(error.code, error.message);
 			});
 	};
+	
 
-
-
+useEffect(() => { 
+	const unsubscribe = 
 	onAuthStateChanged(auth, (user) => {
-		if (user) {
+		if (user ) {
 			// User is signed in, see docs for a list of available properties
 			// https://firebase.google.com/docs/reference/js/firebase.User
 			console.log(user.uid);
 			document.querySelector('.logOutBtn').style.display = 'block';
+			
 			// ...
 		} else {
 			// User is signed out
 			console.log('signed out');
 			document.querySelector('.logOutBtn').style.display = 'none';
+			
 		}
 		return;
-	});
+	})
+	return unsubscribe;
+}, [])
 
 	setPersistence(auth, inMemoryPersistence)
 		.then(() => {
@@ -64,6 +69,7 @@ const ModalStart = () => {
 		.catch((error) => {
 			console.log(error.code, error.message);
 		});
+
 	return (
 		<div className="modal-container">
 			<button onClick={signIn}>Gmail</button>
