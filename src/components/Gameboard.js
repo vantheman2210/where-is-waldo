@@ -1,74 +1,7 @@
-import './App.css';
-import Header from './components/Header';
-
-import ModalStart from './components/ModalStart';
-
-import Leaderboard from './components/Leaderboard';
-import Gameboard from './components/Gameboard';
-import { Link, Route, Routes } from 'react-router-dom';
-
-function App() {
 
 
-	return (
-		
-		<div className="app-container">
-			
-			<Header />
-			<Gameboard/>
-			<ModalStart />
-			<Leaderboard />
-			</div>
-			
-		
-	);
-}
-
-export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-	import './App.css';
-import Header from './components/Header';
 import { useEffect, useState } from 'react';
-import { db } from './Firebase';
+import { db } from '../Firebase';
 import {
 	collection,
 	addDoc,
@@ -81,14 +14,14 @@ import {
 	serverTimestamp
 } from 'firebase/firestore';
 
-import { auth, user } from './Firebase';
+import { auth } from '../Firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import ModalStart from './components/ModalStart';
-import playerSelectionHandler from './helper/playerSelection';
-import Leaderboard from './components/Leaderboard';
+
+import playerSelectionHandler from '../helper/playerSelection'
+
 import { Route, Routes } from 'react-router-dom';
 
-function App() {
+function Gameboard() {
 	const [ id, setId ] = useState();
 	const [ items, setItems ] = useState([]);
 
@@ -104,8 +37,8 @@ function App() {
 		await addDoc(collection(db, 'items-found'), { item, id, timestamp: serverTimestamp() });
 	};
 
-	const playerLeaderBoard = async (time) => {
-		await addDoc(collection(db, 'leaderboard'), { id, time });
+	const playerLeaderBoard = async (time, name) => {
+		await addDoc(collection(db, 'leaderboard'), { name, time });
 	};
 
 	useEffect(() => {
@@ -152,7 +85,7 @@ function App() {
 			div.style.left = coordX - div.offsetWidth / 2 + 'px';
 		div.style.top = coordY - div.offsetHeight / 2 + 'px';
 		*/
-/*
+
 		if (auth.currentUser) {
 			playerSelection(coordX, coordY, id);
 			setItems(await getItemCoords());
@@ -259,7 +192,7 @@ function App() {
 			console.log((getEndTime[1].toMillis() - getStartTime[0].toMillis()) / 1000);
 			console.log(time);
 
-			await playerLeaderBoard(time);
+			await playerLeaderBoard(time, prompt());
 
 			return console.log('game won');
 		}
@@ -269,9 +202,9 @@ function App() {
 
 	return (
 		<div className="app-container">
-			<Header />
+			
 			<div>
-				<img className="photo" onClick={onClick} src={require('./images/background.png')} alt="game" />
+				<img className="photo" onClick={onClick} src={require('../images/background.png')} alt="game" />
 				<div className="clickable-div">
 					{items.map((item, i) => {
 						return (
@@ -282,34 +215,9 @@ function App() {
 					})}
 				</div>
 			</div>
-			<ModalStart />
+			
 		</div>
 	);
 }
- */
 
-/*
-	import './App.css';
-import Header from './components/Header';
-import { useEffect, useState } from 'react';
-import { db } from './Firebase';
-import {
-	collection,
-	addDoc,
-	getDocs,
-	where,
-	doc,
-	updateDoc,
-	query,
-	deleteDoc,
-	serverTimestamp
-} from 'firebase/firestore';
-
-import { auth, user } from './Firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import ModalStart from './components/ModalStart';
-import playerSelectionHandler from './helper/playerSelection';
-import Leaderboard from './components/Leaderboard';
-import Gameboard from './components/Gameboard';
-import { Route, Routes } from 'react-router-dom';
- */
+export default Gameboard;

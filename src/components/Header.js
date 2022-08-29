@@ -3,13 +3,7 @@ import { auth } from "../Firebase";
 const Header = () => { 
 
   const signOut = () => { 
-    signOut(auth).then(() => {
-      // Sign-out successful.
-      console.log('signed out')
-    }).catch((error) => {
-      // An error happened.
-      console.log(error)
-    });
+    auth.signOut();
   }
   
   useEffect(() => { 

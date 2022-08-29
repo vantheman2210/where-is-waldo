@@ -28,7 +28,7 @@ const Leaderboard = () => {
     <div className="leaderboard-container">
       {leaderboard.map((player, i) => { 
         return (
-          <p key={i}>{player.id}: {player.time}</p>
+          <p key={i}>{player.name}: {player.time}</p>
         )
       })}
     </div>
