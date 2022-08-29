@@ -4,65 +4,25 @@ import Header from './components/Header';
 import ModalStart from './components/ModalStart';
 
 import Leaderboard from './components/Leaderboard';
+
 import Gameboard from './components/Gameboard';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
-
-
 	return (
-		
 		<div className="app-container">
-			
 			<Header />
-			<Gameboard/>
 			<ModalStart />
-			<Leaderboard />
-			</div>
-			
-		
+
+			<Routes>
+				<Route exact path="/" element={<Gameboard />} />
+				<Route exact path="/leaderboard" element={<Leaderboard />} />
+			</Routes>
+		</div>
 	);
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 	import './App.css';
