@@ -1,0 +1,21 @@
+.homeContainer {
+	display: flex;
+	flex-direction: row;
+  padding: 1rem;
+	gap: 1rem;
+}
+
+.card {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid black;
+  border-radius: 8px;
+	width: 10rem;
+	height: 15rem;
+}
+
+.easy, .medium, .hard{
+	max-width: 100%;
+	max-height: 100%;
+}

@@ -20,13 +20,12 @@ const Leaderboard = () => {
 		console.log(leaderboard);
 	}, []);
 
-  const modalToggle = () => { 
-
-    if(!document.querySelector('.modal-container').classList.contains("modal-container-hide")) {
-
-    document.querySelector('.modal-container').classList.toggle("modal-container-hide");}
-    return;
-  }
+	const modalToggle = () => {
+		if (!document.querySelector('.modal-container').classList.contains('modal-container-hide')) {
+			document.querySelector('.modal-container').classList.toggle('modal-container-hide');
+		}
+		return;
+	};
 
 	return (
 		<div className="leaderboard-container">
@@ -37,7 +36,7 @@ const Leaderboard = () => {
 			{leaderboard.map((player, i) => {
 				return (
 					<p key={i}>
-						{player.name}: {player.time}
+						{player.name}: {`${Number(player.time).toFixed(2)} seconds`}
 					</p>
 				);
 			})}

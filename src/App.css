@@ -28,3 +28,11 @@ html, body, .container, #root {
   min-width: 1rem;
   overflow: auto;
 }
+
+.logOutBtn { 
+  display: none;
+}
+
+.logOutBtn-show { 
+  display: block;
+}

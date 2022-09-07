@@ -19,7 +19,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 import playerSelectionHandler from '../helper/playerSelection'
 
-import { Route, Routes } from 'react-router-dom';
+import ModalPrompt from './ModalPrompt';
 
 function Gameboard() {
 	const [ id, setId ] = useState();
@@ -192,7 +192,7 @@ function Gameboard() {
 			console.log((getEndTime[1].toMillis() - getStartTime[0].toMillis()) / 1000);
 			console.log(time);
 
-			await playerLeaderBoard(time, prompt());
+			await playerLeaderBoard(time, prompt(ModalPrompt));
 
 			return console.log('game won');
 		}
@@ -204,7 +204,7 @@ function Gameboard() {
 		<div className="app-container">
 			
 			<div>
-				<img className="photo" onClick={onClick} src={require('../images/background.png')} alt="game" />
+				<img className="photo" onClick={onClick} src={require('../images/backgroundMedium.png')} alt="game" />
 				<div className="clickable-div">
 					{items.map((item, i) => {
 						return (

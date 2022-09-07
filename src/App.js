@@ -6,16 +6,18 @@ import ModalStart from './components/ModalStart';
 import Leaderboard from './components/Leaderboard';
 
 import Gameboard from './components/Gameboard';
+
+import Home from './pages/Home';
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
 	return (
 		<div className="app-container">
 			<Header />
-			<ModalStart />
+			 
 
 			<Routes>
-				<Route exact path="/" element={<Gameboard />} />
+				<Route exact path="/" element={<Home />} />
 				<Route exact path="/leaderboard" element={<Leaderboard />} />
 			</Routes>
 		</div>
@@ -24,6 +26,8 @@ function App() {
 
 export default App;
 
+
+//<ModalStart />
 /*
 	import './App.css';
 import Header from './components/Header';
