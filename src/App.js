@@ -10,6 +10,7 @@ import Gameboard from './components/Gameboard';
 import Home from './pages/Home';
 import { Route, Routes } from 'react-router-dom';
 
+
 function App() {
 	return (
 		<div className="app-container">
@@ -19,6 +20,7 @@ function App() {
 			<Routes>
 				<Route exact path="/" element={<Home />} />
 				<Route exact path="/leaderboard" element={<Leaderboard />} />
+				<Route exact path="/gameboard" element={<Gameboard />} />
 			</Routes>
 		</div>
 	);

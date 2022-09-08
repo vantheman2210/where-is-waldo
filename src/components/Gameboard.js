@@ -1,5 +1,5 @@
 
-
+import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { db } from '../Firebase';
 import {
@@ -24,6 +24,7 @@ import ModalPrompt from './ModalPrompt';
 function Gameboard() {
 	const [ id, setId ] = useState();
 	const [ items, setItems ] = useState([]);
+	const data = useLocation();
 
 	const playerSelection = async (coord1, coord2, id) => {
 		await addDoc(collection(db, 'player-selection'), playerCoords(coord1, coord2, id));
@@ -199,7 +200,9 @@ function Gameboard() {
 
 		return;
 	};
-
+useEffect(() => { 
+	console.log(data.state.level)
+}, [data])
 	return (
 		<div className="app-container">
 			
