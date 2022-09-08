@@ -7,6 +7,8 @@ import Leaderboard from './components/Leaderboard';
 
 import Gameboard from './components/Gameboard';
 
+import Footer from './components/Footer';
+
 import Home from './pages/Home';
 import { Route, Routes } from 'react-router-dom';
 
@@ -22,6 +24,7 @@ function App() {
 				<Route exact path="/leaderboard" element={<Leaderboard />} />
 				<Route exact path="/gameboard" element={<Gameboard />} />
 			</Routes>
+			<Footer/>
 		</div>
 	);
 }

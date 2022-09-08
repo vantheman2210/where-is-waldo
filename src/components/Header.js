@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { auth } from '../Firebase';
 import { Link } from 'react-router-dom';
+import '../styles/Header.css';
+
 const Header = () => {
 	const signOut = () => {
 		auth.signOut();
@@ -22,7 +24,7 @@ const Header = () => {
 
 	return (
 		<div className="header">
-			<p>WALDO</p>
+			<p className="title">WHERE'S WALDO</p>
 			<button className="logOutBtn">LOG OUT</button>
 			<Link to="/leaderboard" onClick={modalToggle}>
 				<p>Leaderboard</p>

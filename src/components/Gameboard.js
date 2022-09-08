@@ -20,6 +20,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import playerSelectionHandler from '../helper/playerSelection'
 
 import ModalPrompt from './ModalPrompt';
+import ModalStart from './ModalStart';
+import { Link } from 'react-router-dom';
 
 function Gameboard() {
 	const [ id, setId ] = useState();
@@ -200,14 +202,12 @@ function Gameboard() {
 
 		return;
 	};
-useEffect(() => { 
-	console.log(data.state.level)
-}, [data])
+
 	return (
-		<div className="app-container">
-			
+		<div className="gameboard-container">
+			<ModalStart/>
 			<div>
-				<img className="photo" onClick={onClick} src={require('../images/backgroundMedium.png')} alt="game" />
+				<img className={`${data.state.level}`} onClick={onClick} src={require(`../images/background${data.state.level}.jpg`)} alt="game" />
 				<div className="clickable-div">
 					{items.map((item, i) => {
 						return (
@@ -218,7 +218,9 @@ useEffect(() => {
 					})}
 				</div>
 			</div>
-			
+			<Link to="/">
+			<button>Return</button>
+			</Link>
 		</div>
 	);
 }

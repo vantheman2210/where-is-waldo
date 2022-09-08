@@ -1,10 +1,33 @@
+@font-face {
+  font-family: 'Nordic Light';
+  src: url(./fonts/NORDIC\ LIGHT.ttf);
+}
+
+@font-face {
+  font-family: 'Jungle';
+  src: url(./fonts/JungleAdventurer.ttf)
+}
+
 html, body, .container, #root { 
   width: 100%;
   height: 100%; 
   margin: 0; 
-} 
+  font-family: 'Nordic Light', Arial, Helvetica, sans-serif;
+  background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+  color: white;
+}
 
 .app-container { 
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%; 
+  width: 100%;
+  gap: 1rem;
+}
+
+.gameboard-container { 
   display: flex; 
   flex-direction: column;
   align-items: center;
@@ -14,9 +37,19 @@ html, body, .container, #root {
   gap: 1rem;
 }
 
-.photo { 
+.Easy { 
+  height: 50rem;
+  width: 75rem;
+}
+
+.Medium { 
   height: 75rem;
   width: 50rem;
+}
+
+.Hard { 
+  height: 50rem;
+  width: 75rem;
 }
 
 .clickable-div { 
@@ -35,4 +68,8 @@ html, body, .container, #root {
 
 .logOutBtn-show { 
   display: block;
+}
+
+footer { 
+  
 }

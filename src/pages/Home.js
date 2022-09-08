@@ -8,27 +8,22 @@ const Home = () => {
 	const chooseLevel = (e) => {
 		setLevel(e.currentTarget.firstChild.className);
 	};
-	useEffect(
-		() => {
-			console.log(level);
-		},
-		[ level ]
-	);
+
 	return (
 		<div className="homeContainer">
-			<Link to="/gameboard" state={{ level: "easy" }}>
-				<div className="card" onClick={chooseLevel}>
+			<Link to="/gameboard" state={{ level: 'Easy' }}>
+				<div className="card" id="cardEasy" onClick={chooseLevel}>
 					<img className="easy" src={require('../images/backgroundEasy.jpg')} alt="game" />
 				</div>
 			</Link>
 
-			<Link to="/gameboard" state={{ level: "medium" }}>
-				<div className="card" onClick={chooseLevel} value="medium">
-					<img className="medium" src={require('../images/backgroundMedium.png')} alt="game" />
+			<Link to="/gameboard" state={{ level: 'Medium' }}>
+				<div className="card" id="cardMedium" onClick={chooseLevel}>
+					<img className="medium" src={require('../images/backgroundMedium.jpg')} alt="game" />
 				</div>
 			</Link>
-			<Link to="/gameboard" state={{ level: "hard" }}>
-				<div className="card" onClick={chooseLevel}>
+			<Link to="/gameboard" state={{ level: 'Hard' }}>
+				<div className="card" id="cardHard" onClick={chooseLevel}>
 					<img className="hard" src={require('../images/backgroundHard.jpg')} alt="game" />
 				</div>
 			</Link>
