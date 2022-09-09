@@ -91,12 +91,15 @@ function Gameboard() {
 		*/
 
 		if (auth.currentUser) {
+			
 			playerSelection(coordX, coordY, id);
 			setItems(await getItemCoords());
 		} else {
 			console.log('not logged in');
 		}
 	};
+
+
 
 	const checkSelection = async (coordX, coordY, itemDrop) => {
 		if (auth.currentUser) {
@@ -220,7 +223,7 @@ function Gameboard() {
 					alt="game"
 				/>
 				<div className="clickable-div">
-					{items.map((item, i) => {
+					{items.filter(item => item.level === data.state.level).map((item, i) => {
 						return (
 							<p onClick={checkClick} key={i} className="list">
 								{item.item}
