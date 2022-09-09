@@ -186,20 +186,25 @@ function Gameboard() {
 		const getEndTime = queryData.docs.map((doc) => doc.data().timestamp);
 
 		const check = getData.includes('microwave' && 'toaster');
+		const checkTwo = getData.includes('Waldo')
 		console.log(getData);
+		console.log(check, checkTwo)
 
-		if (check) {
-			console.log(getStartTime[0].toDate());
-			console.log(getEndTime[0].toDate());
-			console.log(getEndTime[1].toDate());
+		if (check || checkTwo) {
+			
+			//console.log(getStartTime[0].toDate());
+			//console.log(getEndTime[0].toDate());
+			//console.log(getEndTime[1].toDate());
 			const time = (getEndTime[0].toMillis() - getStartTime[0].toMillis()) / 1000;
-			console.log((getEndTime[1].toMillis() - getStartTime[0].toMillis()) / 1000);
+			
 			console.log(time);
 
 			await playerLeaderBoard(time, prompt(ModalPrompt));
 
 			return console.log('game won');
-		}
+		} 
+
+		
 
 		return;
 	};
