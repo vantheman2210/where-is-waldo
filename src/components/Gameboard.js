@@ -176,6 +176,8 @@ function Gameboard() {
 	};
 
 	const isGameOver = async (id) => {
+		const arr = ['Luigi',  'Ezio(AC)' , 'Pikachu', 'Destiny(Ghost)', 'The Witcher']
+
 		const data = query(collection(db, 'items-found'), where('id', '==', id));
 		const queryData = await getDocs(data);
 
@@ -188,12 +190,15 @@ function Gameboard() {
 
 		const getEndTime = queryData.docs.map((doc) => doc.data().timestamp);
 
-		const check = getData.includes('microwave' && 'toaster');
-		const checkTwo = getData.includes('Waldo')
+		const checkMedium = getData.includes('microwave' && 'toaster');
+		const checkHard = getData.includes('Waldo');
+		const checkEasy = arr.every(value => { 
+			return getData.includes(value);
+		});
 		console.log(getData);
-		console.log(check, checkTwo)
+		console.log(checkEasy)
 
-		if (check || checkTwo) {
+		if (checkEasy || checkMedium || checkHard) {
 			
 			//console.log(getStartTime[0].toDate());
 			//console.log(getEndTime[0].toDate());
