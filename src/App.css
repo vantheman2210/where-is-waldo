@@ -1,75 +1,115 @@
 @font-face {
-  font-family: 'Nordic Light';
-  src: url(./fonts/NORDIC\ LIGHT.ttf);
+	font-family: 'Nordic Light';
+	src: url(./fonts/NORDIC\ LIGHT.ttf);
 }
 
 @font-face {
-  font-family: 'Jungle';
-  src: url(./fonts/JungleAdventurer.ttf)
+	font-family: 'Jungle';
+	src: url(./fonts/JungleAdventurer.ttf);
 }
 
-html, body, .container, #root { 
-  width: 100%;
-  height: 100%; 
-  margin: 0; 
-  font-family: 'Nordic Light', Arial, Helvetica, sans-serif;
-  background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
-  color: white;
+html,
+body,
+.container,
+#root {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	font-family: 'Nordic Light', Arial, Helvetica, sans-serif;
+	background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+	color: white;
 }
 
-.app-container { 
-  display: flex; 
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  height: 100%; 
-  width: 100%;
-  gap: 1rem;
+.app-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	height: 100%;
+	width: 100%;
+	gap: 1rem;
 }
 
-.gameboard-container { 
-  display: flex; 
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: fit-content; 
-  width: fit-content;
-  gap: 1rem;
+.gameboard-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: fit-content;
+	width: fit-content;
+	gap: 1rem;
 }
 
-.Easy { 
-  height: 50rem;
-  width: 75rem;
+a {
+	text-decoration: none;
 }
 
-.Medium { 
-  height: 75rem;
-  width: 50rem;
+.Easy {
+	height: 50rem;
+	width: 75rem;
 }
 
-.Hard { 
-  height: 50rem;
-  width: 75rem;
+.Medium {
+	height: 75rem;
+	width: 50rem;
 }
 
-.clickable-div { 
-  position: absolute; 
-  background-color: white;
-  height: fit-content;
-  width: fit-content;
-  min-height: 1rem;
-  min-width: 1rem;
-  overflow: auto;
+.Hard {
+	height: 50rem;
+	width: 75rem;
 }
 
-.logOutBtn { 
-  display: none;
+.clickable-div {
+	position: absolute;
+	background-color: white;
+	height: fit-content;
+	width: fit-content;
+	min-height: 1rem;
+	min-width: 1rem;
+	overflow: auto;
 }
 
-.logOutBtn-show { 
-  display: block;
+.logOutBtn {
+	display: none;
 }
 
-footer { 
-  
+.logOutBtn-show {
+	display: block;
+}
+
+.leaderboard-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.return {
+	display: inline-block;
+	outline: 0;
+	border: 0;
+	cursor: pointer;
+	will-change: box-shadow, transform;
+	background: linear-gradient(to right, #20195a, #554cb1, #5a5aa0);
+	box-shadow: 0px 2px 4px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%),
+		inset 0px -3px 0px rgb(58 65 111 / 50%);
+	padding: 0 15px;
+	border-radius: 6px;
+	color: #fff;
+	height: 48px;
+	font-size: 15px;
+	letter-spacing: 2px;
+	text-shadow: 0 1px 0 rgb(0 0 0 / 40%);
+	transition: box-shadow 0.15s ease, transform 0.15s ease;
+	font-family: 'Nordic Light', Arial, Helvetica, sans-serif;
+}
+
+.return:hover {
+	box-shadow: 0px 4px 8px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px #3c4fe0;
+	transform: translateY(-2px);
+}
+
+.return:active {
+	box-shadow: inset 0px 3px 7px #3c4fe0;
+	transform: translateY(2px);
 }

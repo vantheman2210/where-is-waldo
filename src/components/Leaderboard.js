@@ -30,7 +30,7 @@ const Leaderboard = () => {
 	return (
 		<div className="leaderboard-container">
 			<Link to="/" onClick={modalToggle}>
-				<p>Return</p>
+				<button className='return'>Return</button>
 			</Link>
 
 			{leaderboard.map((player, i) => {

@@ -219,7 +219,7 @@ function Gameboard() {
 				</div>
 			</div>
 			<Link to="/">
-			<button>Return</button>
+			<button className="return">Return</button>
 			</Link>
 		</div>
 	);

@@ -1,27 +1,32 @@
-
-.header { 
-  display: flex; 
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.header {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
-.title { 
-  font-size: 50px;
-  letter-spacing: 5px;
+.title {
+	font-size: 50px;
+	letter-spacing: 5px;
 }
 
-a { 
-  text-decoration: none;
-  font-size: ;
-  letter-spacing: 1px;
-  color: red;
+.leaderboardBtn {
+	font-size: 20px;
+	letter-spacing: 1px;
+	color: red;
+	padding: 3px;
+	border-radius: 8px;
 }
 
-.logOutBtn { 
-  display: none;
+.leaderboardBtn:hover {
+	transform: scale(1.1);
+	box-shadow: 0px 0px 10px 4px rgba(245, 245, 245, 0.5);
 }
 
-.logOutBtn-show { 
-  display: block;
+.logOutBtn {
+	display: none;
+}
+
+.logOutBtn-show {
+	display: block;
 }

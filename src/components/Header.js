@@ -27,7 +27,7 @@ const Header = () => {
 			<p className="title">WHERE'S WALDO</p>
 			<button className="logOutBtn">LOG OUT</button>
 			<Link to="/leaderboard" onClick={modalToggle}>
-				<p>Leaderboard</p>
+				<p className='leaderboardBtn'>Leaderboard</p>
 			</Link>
 		</div>
 	);
