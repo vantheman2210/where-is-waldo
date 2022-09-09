@@ -1,4 +1,3 @@
-
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { db } from '../Firebase';
@@ -17,7 +16,7 @@ import {
 import { auth } from '../Firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
-import playerSelectionHandler from '../helper/playerSelection'
+import playerSelectionHandler from '../helper/playerSelection';
 
 import ModalPrompt from './ModalPrompt';
 import ModalStart from './ModalStart';
@@ -74,15 +73,17 @@ function Gameboard() {
 
 	const onClick = async (e) => {
 		const div = document.querySelector('.clickable-div');
-
-		const coordX = e.pageX;
-		const coordY = e.pageY;
+		console.log(e);
+		const placeDivX = e.pageX;
+		const placeDivY = e.pageY;
+		const coordX = Math.round(e.nativeEvent.offsetX / e.nativeEvent.target.offsetWidth * 100);
+		const coordY = Math.round(e.nativeEvent.offsetY / e.nativeEvent.target.offsetHeight * 100);
 		console.log('X:' + coordX);
 		console.log('Y:' + coordY);
 		console.log(items);
 
-		div.style.left = coordX + 'px';
-		div.style.top = coordY + 'px';
+		div.style.left = placeDivX + "px";
+		div.style.top = placeDivY + "px";
 
 		/*
 			div.style.left = coordX - div.offsetWidth / 2 + 'px';
@@ -185,12 +186,12 @@ function Gameboard() {
 		const getEndTime = queryData.docs.map((doc) => doc.data().timestamp);
 
 		const check = getData.includes('microwave' && 'toaster');
-		console.log(getData)
-		
+		console.log(getData);
+
 		if (check) {
-			console.log(getStartTime[0].toDate())
-			console.log(getEndTime[0].toDate())
-			console.log(getEndTime[1].toDate())
+			console.log(getStartTime[0].toDate());
+			console.log(getEndTime[0].toDate());
+			console.log(getEndTime[1].toDate());
 			const time = (getEndTime[0].toMillis() - getStartTime[0].toMillis()) / 1000;
 			console.log((getEndTime[1].toMillis() - getStartTime[0].toMillis()) / 1000);
 			console.log(time);
@@ -205,13 +206,18 @@ function Gameboard() {
 
 	return (
 		<div className="gameboard-container">
-			<ModalStart/>
+			<ModalStart />
 			<div>
-				<img className={`${data.state.level}`} onClick={onClick} src={require(`../images/background${data.state.level}.jpg`)} alt="game" />
+				<img
+					className={`${data.state.level}`}
+					onClick={onClick}
+					src={require(`../images/background${data.state.level}.jpg`)}
+					alt="game"
+				/>
 				<div className="clickable-div">
 					{items.map((item, i) => {
 						return (
-							<p onClick={checkClick} key={i}>
+							<p onClick={checkClick} key={i} className="list">
 								{item.item}
 							</p>
 						);
@@ -219,7 +225,7 @@ function Gameboard() {
 				</div>
 			</div>
 			<Link to="/">
-			<button className="return">Return</button>
+				<button className="return">Return</button>
 			</Link>
 		</div>
 	);

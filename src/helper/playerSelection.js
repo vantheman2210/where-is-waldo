@@ -3,14 +3,8 @@ const playerSelectionHandler = (coord1, coord2) => {
 		coord1 === coord2 ||
 		coord1 + 1 === coord2 ||
 		coord1 + 2 === coord2 ||
-		coord1 + 3 === coord2 ||
-		coord1 + 4 === coord2 ||
-		coord1 + 5 === coord2 ||
 		coord1 - 1 === coord2 ||
-		coord1 - 2 === coord2 ||
-		coord1 - 3 === coord2 ||
-		coord1 - 4 === coord2 ||
-		coord1 - 5 === coord2 
+		coord1 - 2 === coord2 
 	);
 };
 
