@@ -40,7 +40,7 @@ body,
 	gap: 1rem;
 }
 
-.list { 
+.list {
 	color: #20195a;
 }
 
@@ -116,4 +116,8 @@ a {
 .return:active {
 	box-shadow: inset 0px 3px 7px #3c4fe0;
 	transform: translateY(2px);
+}
+
+.footer > p { 
+	margin: 0;
 }

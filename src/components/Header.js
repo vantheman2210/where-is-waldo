@@ -24,7 +24,7 @@ const Header = () => {
 
 	return (
 		<div className="header">
-			<p className="title">WHERE'S WALDO</p>
+			<p className="title">WHERE'S WALDO?</p>
 			<button className="logOutBtn">LOG OUT</button>
 			<Link to="/leaderboard" onClick={modalToggle}>
 				<p className='leaderboardBtn'>Leaderboard</p>
