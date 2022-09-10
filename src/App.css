@@ -81,13 +81,6 @@ a {
 	display: block;
 }
 
-.leaderboard-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
-
 .return {
 	display: inline-block;
 	outline: 0;

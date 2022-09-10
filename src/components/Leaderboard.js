@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../Firebase';
 import { getDocs, collection } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
+import '../styles/Leaderboard.css';
 
 const Leaderboard = () => {
 	const [ leaderboard, setLeaderboard ] = useState([]);
@@ -30,16 +31,20 @@ const Leaderboard = () => {
 	return (
 		<div className="leaderboard-container">
 			<Link to="/" onClick={modalToggle}>
-				<button className='return'>Return</button>
+				<button className="return">Return</button>
 			</Link>
-
-			{leaderboard.map((player, i) => {
-				return (
-					<p key={i}>
-						{player.name}: {`${Number(player.time).toFixed(2)} seconds`}
-					</p>
-				);
-			})}
+			<div className="list-container">
+				{leaderboard.sort((a, b) => a.time - b.time).map((player, i) => {
+					return (
+						<div className='score-container' key={i}>
+							<p className='name'>
+								<b>{player.name}</b>:
+							</p>
+							<p>{`${Number(player.time).toFixed(2)} seconds`}</p>
+						</div>
+					);
+				})}
+			</div>
 		</div>
 	);
 };
