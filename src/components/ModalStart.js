@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/ModalStart.css'
 import { auth } from '../Firebase';
 import {
@@ -13,6 +13,7 @@ import {
 
 const ModalStart = () => {
 	const provider = new GoogleAuthProvider();
+	
 
 	const signIn = () => {
 		signInWithPopup(auth, provider)
@@ -35,28 +36,6 @@ const ModalStart = () => {
 				console.log(error.code, error.message);
 			});
 	};
-	
-
-useEffect(() => { 
-	const unsubscribe = 
-	onAuthStateChanged(auth, (user) => {
-		if (user ) {
-			// User is signed in, see docs for a list of available properties
-			// https://firebase.google.com/docs/reference/js/firebase.User
-			console.log(user.uid);
-			document.querySelector('.logOutBtn').style.display = 'block';
-			
-			// ...
-		} else {
-			// User is signed out
-			console.log('signed out');
-			document.querySelector('.logOutBtn').style.display = 'none';
-			
-		}
-		return;
-	})
-	return unsubscribe;
-}, [])
 
 	setPersistence(auth, inMemoryPersistence)
 		.then(() => {
@@ -79,3 +58,26 @@ useEffect(() => {
 };
 
 export default ModalStart;
+
+
+/* useEffect(() => { 
+	const unsubscribe = 
+	onAuthStateChanged(auth, (user) => {
+		if (user) {
+			// User is signed in, see docs for a list of available properties
+			// https://firebase.google.com/docs/reference/js/firebase.User
+			
+			console.log(user.uid);
+			document.querySelector('.logOutBtn').style.display = 'block';
+			
+			// ...
+		} else {
+			// User is signed out
+			console.log('signed out');
+			document.querySelector('.logOutBtn').style.display = 'none';
+			
+		}
+		return;
+	})
+	return unsubscribe;
+}, [])*/

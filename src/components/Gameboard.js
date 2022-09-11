@@ -23,9 +23,14 @@ import ModalStart from './ModalStart';
 import { Link } from 'react-router-dom';
 
 function Gameboard() {
-	const [ id, setId ] = useState();
+	const [ id, setId ] = useState('');
 	const [ items, setItems ] = useState([]);
 	const data = useLocation();
+	
+
+	useEffect(() => { 
+		console.log(id)
+	},[id])
 
 	const playerSelection = async (coord1, coord2, id) => {
 		await addDoc(collection(db, 'player-selection'), playerCoords(coord1, coord2, id));
@@ -47,17 +52,20 @@ function Gameboard() {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 			if (user) {
 				const uid = user.uid;
-				setId(uid);
+				setId(user.uid);
 				addPlayer(uid);
 				console.log(uid);
+				console.log(id)
 				document.querySelector('.modal-container').classList.add('modal-container-hide');
+				document.querySelector('.logOutBtn').style.display = 'block';
 			} else {
 				// User is signed out
 				console.log('signed out');
 
 				document.querySelector('.modal-container').classList.remove('modal-container-hide');
+				document.querySelector('.logOutBtn').style.display = 'none';
 				setId();
-				return;
+				
 			}
 		});
 		return unsubscribe;
@@ -85,11 +93,6 @@ function Gameboard() {
 		div.style.left = placeDivX + "px";
 		div.style.top = placeDivY + "px";
 
-		/*
-			div.style.left = coordX - div.offsetWidth / 2 + 'px';
-		div.style.top = coordY - div.offsetHeight / 2 + 'px';
-		*/
-
 		if (auth.currentUser) {
 			
 			playerSelection(coordX, coordY, id);
@@ -106,7 +109,7 @@ function Gameboard() {
 			const checkData = await getItemCoords();
 
 			const isItemFound = checkData.some(
-				(item) => playerSelectionHandler(coordX, item.coordX) || playerSelectionHandler(coordY, item.coordY)
+				(item) => playerSelectionHandler(coordX, item.coordX) && playerSelectionHandler(coordY, item.coordY)
 			);
 			console.log(isItemFound, checkData);
 			if (!isItemFound) {
@@ -162,6 +165,18 @@ function Gameboard() {
 		});
 	};
 
+	const updateTime = async () => { 
+		const itemRef = collection(db, 'player');
+		const queryRef = query(itemRef, where('id', '==', id));
+		const data = await getDocs(queryRef);
+		const getData = data.docs.map((doc) => (doc = doc.id)).join();
+		console.log(getData);
+		const updateRef = doc(db, 'player', getData);
+		const getItem = await updateDoc(updateRef, {
+			timestamp: serverTimestamp()
+		});
+	}
+
 	const deletePlayerCoord = async () => {
 		const coordRef = collection(db, 'player-selection');
 		const queryRef = query(coordRef, where('playerId', '==', id));
@@ -174,6 +189,36 @@ function Gameboard() {
 			await deleteDoc(doc(db, 'player-selection', docs));
 		}
 	};
+
+	const deletePlayerFound = async () => { 
+		const coordRef = collection(db, 'items-found');
+		const queryRef = query(coordRef, where('id', '==', id));
+
+		const data = await getDocs(queryRef);
+
+		const docId = data.docs.map((doc) => (doc = doc.id));
+
+		for (const docs of docId) {
+			await deleteDoc(doc(db, 'items-found', docs));
+		}
+	}
+
+	
+	const deletePlayerTime = async () => {
+		if(id) { 
+		const coordRef = collection(db, 'player');
+		const queryRef = query(coordRef, where('id', '==', id));
+
+		const data = await getDocs(queryRef);
+
+		const docId = data.docs.map((doc) => (doc = doc.id));
+
+		for (const docs of docId) {
+			await deleteDoc(doc(db, 'player', docs));
+		} 
+	}
+	console.log('not logged')
+	}
 
 	const isGameOver = async (id) => {
 		const arr = ['Luigi',  'Ezio(AC)' , 'Pikachu', 'Destiny(Ghost)', 'The Witcher']
@@ -200,10 +245,10 @@ function Gameboard() {
 
 		if (checkEasy || checkMedium || checkHard) {
 			
-			//console.log(getStartTime[0].toDate());
-			//console.log(getEndTime[0].toDate());
-			//console.log(getEndTime[1].toDate());
+			
 			const time = (getEndTime[0].toMillis() - getStartTime[0].toMillis()) / 1000;
+
+			deletePlayerFound();
 			
 			console.log(time);
 
@@ -238,7 +283,7 @@ function Gameboard() {
 				</div>
 			</div>
 			<Link to="/">
-				<button className="return">Return</button>
+				<button onClick={deletePlayerTime} className="return">Return</button>
 			</Link>
 		</div>
 	);
