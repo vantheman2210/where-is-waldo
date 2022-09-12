@@ -88,3 +88,8 @@ input {
 	box-shadow: inset 0px 3px 7px #3c4fe0;
 	transform: translateY(2px);
 }
+
+.instructions { 
+	font-size: 10px;
+	letter-spacing: 1px;
+}

@@ -87,6 +87,12 @@ const ModalStart = () => {
 			</form>
 			<button onClick={signIn}>Gmail</button>
 			<button onClick={anonymousSignIn}>Anonymous Log In</button>
+			<p className="instructions">
+				Steps: <br></br>
+				1: Submit your name. <br></br>
+				2: Choose login option. <br></br>
+				3. Have fun!
+			</p>
 		</div>
 	);
 };
