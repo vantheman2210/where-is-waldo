@@ -9,6 +9,7 @@ const Leaderboard = () => {
 
 	const [level, setLevel] = useState('Easy');
 
+
 	const getItemCoords = async () => {
 		const data = await getDocs(collection(db, 'leaderboard'));
 		const items = data.docs.map((doc) => (doc = doc.data()));

@@ -226,9 +226,12 @@ function Gameboard() {
 
 		const getData = queryData.docs.map((doc) => doc.data().item);
 
+		const data3 = query(collection(db, 'playerName'), where('id', '==', id));
+		const queryData3 = await getDocs(data3);
+
 		const getStartTime = queryData2.docs.map((doc) => doc.data().timestamp);
 
-		const getName = queryData2.docs.map((doc) => doc.data().name);
+		const getName = queryData3.docs.map((doc) => doc.data().name);
 
 		const getEndTime = queryData.docs.map((doc) => doc.data().timestamp);
 
@@ -238,7 +241,7 @@ function Gameboard() {
 			return getData.includes(value);
 		});
 		console.log(getData);
-		console.log(checkEasy)
+		
 
 		if (checkEasy || checkMedium || checkHard) {
 

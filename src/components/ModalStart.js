@@ -10,7 +10,7 @@ import {
 	inMemoryPersistence
 } from 'firebase/auth';
 
-import { collection, getDocs, where, doc, updateDoc, query } from 'firebase/firestore';
+import { collection, getDocs, where, doc, updateDoc, query, addDoc } from 'firebase/firestore';
 import { db } from '../Firebase';
 
 const ModalStart = () => {
@@ -29,10 +29,15 @@ const ModalStart = () => {
 		});
 	};
 
+	const playerName = async (name, id) => {
+		await addDoc(collection(db, 'playerName'), { name, id});
+	};
+
 	const signIn = () => {
 		signInWithPopup(auth, provider)
 			.then((user) => {
 				updateTime(user.user.uid);
+				playerName(name, user.user.uid)
 				console.log('signed in');
 				setName('');
 			})
@@ -47,6 +52,7 @@ const ModalStart = () => {
 			signInAnonymously(auth, name)
 				.then((user) => {
 					updateTime(user.user.uid);
+					playerName(name, user.user.uid)
 					console.log('signed in');
 					setName('');
 				})
