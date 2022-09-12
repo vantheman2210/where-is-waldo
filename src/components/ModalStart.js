@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/ModalStart.css'
+import '../styles/ModalStart.css';
 import { auth } from '../Firebase';
 import {
 	signInWithPopup,
@@ -7,13 +7,27 @@ import {
 	signInAnonymously,
 	onAuthStateChanged,
 	setPersistence,
-	inMemoryPersistence, 
-	
+	inMemoryPersistence
 } from 'firebase/auth';
+
+import { collection, getDocs, where, doc, updateDoc, query } from 'firebase/firestore';
+import { db } from '../Firebase';
 
 const ModalStart = () => {
 	const provider = new GoogleAuthProvider();
-	
+	const [ name, setName ] = useState();
+
+	const updateTime = async (id) => {
+		const itemRef = collection(db, 'player');
+		const queryRef = query(itemRef, where('id', '==', id));
+		const data = await getDocs(queryRef);
+		const getData = data.docs.map((doc) => (doc = doc.id)).join();
+
+		const updateRef = doc(db, 'player', getData);
+		const getItem = await updateDoc(updateRef, {
+			name: name
+		});
+	};
 
 	const signIn = () => {
 		signInWithPopup(auth, provider)
@@ -25,16 +39,19 @@ const ModalStart = () => {
 			.catch((error) => {
 				console.log(error.code, error.message);
 			});
-	}; 
+	};
 
 	const anonymousSignIn = () => {
-		signInAnonymously(auth)
-			.then(() => {
-				console.log('signed in');
-			})
-			.catch((error) => {
-				console.log(error.code, error.message);
-			});
+		if (name)
+			signInAnonymously(auth, name)
+				.then((user) => {
+					updateTime(user.user.uid);
+					console.log('signed in');
+				})
+				.catch((error) => {
+					console.log(error.code, error.message);
+				});
+		return;
 	};
 
 	setPersistence(auth, inMemoryPersistence)
@@ -49,8 +66,24 @@ const ModalStart = () => {
 			console.log(error.code, error.message);
 		});
 
+	const handleChange = (e) => {
+		e.preventDefault();
+		setName(e.target.value);
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+	};
+
 	return (
 		<div className="modal-container">
+			<form onSubmit={handleSubmit}>
+				<label>
+					Name:
+					<input type="text" value={name} onChange={handleChange} placeholder="Please enter your name" />
+				</label>
+				<input className="formSubmitBtn" type="submit" />
+			</form>
 			<button onClick={signIn}>Gmail</button>
 			<button onClick={anonymousSignIn}>Anonymous Log In</button>
 		</div>
@@ -58,7 +91,6 @@ const ModalStart = () => {
 };
 
 export default ModalStart;
-
 
 /* useEffect(() => { 
 	const unsubscribe = 

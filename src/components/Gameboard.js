@@ -25,12 +25,7 @@ import { Link } from 'react-router-dom';
 function Gameboard() {
 	const [ id, setId ] = useState('');
 	const [ items, setItems ] = useState([]);
-	const data = useLocation();
-	
-
-	useEffect(() => { 
-		console.log(id)
-	},[id])
+	const level = useLocation();
 
 	const playerSelection = async (coord1, coord2, id) => {
 		await addDoc(collection(db, 'player-selection'), playerCoords(coord1, coord2, id));
@@ -44,8 +39,8 @@ function Gameboard() {
 		await addDoc(collection(db, 'items-found'), { item, id, timestamp: serverTimestamp() });
 	};
 
-	const playerLeaderBoard = async (time, name) => {
-		await addDoc(collection(db, 'leaderboard'), { name, time });
+	const playerLeaderBoard = async (time, name, level) => {
+		await addDoc(collection(db, 'leaderboard'), { name, time, level });
 	};
 
 	useEffect(() => {
@@ -233,6 +228,8 @@ function Gameboard() {
 
 		const getStartTime = queryData2.docs.map((doc) => doc.data().timestamp);
 
+		const getName = queryData2.docs.map((doc) => doc.data().name);
+
 		const getEndTime = queryData.docs.map((doc) => doc.data().timestamp);
 
 		const checkMedium = getData.includes('microwave' && 'toaster');
@@ -244,15 +241,15 @@ function Gameboard() {
 		console.log(checkEasy)
 
 		if (checkEasy || checkMedium || checkHard) {
-			
+
 			
 			const time = (getEndTime[0].toMillis() - getStartTime[0].toMillis()) / 1000;
 
 			deletePlayerFound();
 			
 			console.log(time);
-
-			await playerLeaderBoard(time, prompt(ModalPrompt));
+			console.log(level)
+			await playerLeaderBoard(time, getName, level.state.level);
 
 			return console.log('game won');
 		} 
@@ -267,13 +264,13 @@ function Gameboard() {
 			<ModalStart />
 			<div>
 				<img
-					className={`${data.state.level}`}
+					className={`${level.state.level}`}
 					onClick={onClick}
-					src={require(`../images/background${data.state.level}.jpg`)}
+					src={require(`../images/background${level.state.level}.jpg`)}
 					alt="game"
 				/>
 				<div className="clickable-div">
-					{items.filter(item => item.level === data.state.level).map((item, i) => {
+					{items.filter(item => item.level === level.state.level).map((item, i) => {
 						return (
 							<p onClick={checkClick} key={i} className="list">
 								{item.item}

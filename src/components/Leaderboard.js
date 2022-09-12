@@ -7,6 +7,8 @@ import '../styles/Leaderboard.css';
 const Leaderboard = () => {
 	const [ leaderboard, setLeaderboard ] = useState([]);
 
+	const [level, setLevel] = useState('Easy');
+
 	const getItemCoords = async () => {
 		const data = await getDocs(collection(db, 'leaderboard'));
 		const items = data.docs.map((doc) => (doc = doc.data()));
@@ -28,13 +30,46 @@ const Leaderboard = () => {
 		return;
 	};
 
+	const displayLeaderboard = (e) => { 
+		setLevel(e.target.innerText)
+	}
+
+	useEffect(() => { 
+		console.log(level)
+	}, [level])
+
 	return (
 		<div className="leaderboard-container">
 			<Link to="/" onClick={modalToggle}>
 				<button className="return">Return</button>
 			</Link>
-			<div className="list-container">
-				{leaderboard.sort((a, b) => a.time - b.time).map((player, i) => {
+			<div className='leaderboardBtn-container'>
+			<button className='leaderboardBtns' onClick={displayLeaderboard}>Easy</button>
+			<button className='leaderboardBtns' onClick={displayLeaderboard}>Medium</button> 
+			<button className='leaderboardBtns' onClick={displayLeaderboard}>Hard</button>
+			</div>
+			<div className="list-container" onClick={displayLeaderboard}>
+				{leaderboard.filter(board => board.level === level).sort((a, b) => a.time - b.time).map((player, i) => {
+			return (
+				<div className='score-container' key={i}>
+					<p className='name'>
+						<b>{player.name}</b>:
+					</p>
+					<p>{`${Number(player.time).toFixed(2)} seconds`}</p>
+				</div>
+			);
+		})}
+			</div>
+		</div>
+	);
+};
+
+export default Leaderboard;
+
+
+/*
+
+	leaderboard.filter(board => board.level === displayLeaderboard()).sort((a, b) => a.time - b.time).map((player, i) => {
 					return (
 						<div className='score-container' key={i}>
 							<p className='name'>
@@ -43,10 +78,6 @@ const Leaderboard = () => {
 							<p>{`${Number(player.time).toFixed(2)} seconds`}</p>
 						</div>
 					);
-				})}
-			</div>
-		</div>
-	);
-};
+				})
 
-export default Leaderboard;
+*/
