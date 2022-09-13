@@ -6,6 +6,8 @@ import '../styles/Header.css';
 const Header = () => {
 	const signOut = () => {
 		auth.signOut();
+		document.querySelector('.logOutBtn').style.display = 'none';
+		console.log('Signed out')
 	};
 
 	useEffect(() => {

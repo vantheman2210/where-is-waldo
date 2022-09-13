@@ -30,7 +30,7 @@ const ModalStart = () => {
 	};
 
 	const playerName = async (name, id) => {
-		await addDoc(collection(db, 'playerName'), { name, id});
+		await addDoc(collection(db, 'playerName'), { name, id, level: []});
 	};
 
 	const signIn = () => {

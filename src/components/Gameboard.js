@@ -10,7 +10,8 @@ import {
 	updateDoc,
 	query,
 	deleteDoc,
-	serverTimestamp
+	serverTimestamp,
+	arrayUnion
 } from 'firebase/firestore';
 
 import { auth } from '../Firebase';
@@ -18,7 +19,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 import playerSelectionHandler from '../helper/playerSelection';
 
-import ModalPrompt from './ModalPrompt';
+import ModalEnd from './ModalEnd';
 import ModalStart from './ModalStart';
 import { Link } from 'react-router-dom';
 
@@ -53,12 +54,15 @@ function Gameboard() {
 				console.log(id)
 				document.querySelector('.modal-container').classList.add('modal-container-hide');
 				document.querySelector('.logOutBtn').style.display = 'block';
+				document.querySelector('.leaderboardBtn').classList.toggle('leaderboardBtn-hidden')
+				
 			} else {
 				// User is signed out
 				console.log('signed out');
 
 				document.querySelector('.modal-container').classList.remove('modal-container-hide');
 				document.querySelector('.logOutBtn').style.display = 'none';
+				document.querySelector('.leaderboardBtn').classList.toggle('leaderboardBtn-hidden')
 				setId();
 				
 			}
@@ -89,7 +93,7 @@ function Gameboard() {
 		div.style.top = placeDivY + "px";
 
 		if (auth.currentUser) {
-			
+			console.log(id)
 			playerSelection(coordX, coordY, id);
 			setItems(await getItemCoords());
 		} else {
@@ -172,6 +176,37 @@ function Gameboard() {
 		});
 	}
 
+	const updateLevelCompleted = async (value) => { 
+		const itemRef = collection(db, 'playerName');
+		const queryRef = query(itemRef, where('id', '==', id));
+		const data = await getDocs(queryRef);
+		const getData = data.docs.map((doc) => (doc = doc.id)).join();
+		console.log(getData);
+		const updateRef = doc(db, 'playerName', getData);
+		const getItem = await updateDoc(updateRef, {
+			level: arrayUnion(value)
+		});
+		endGame(id);
+	}
+
+	const endGame = async (id) => {
+		const arr = ['Hard', 'Easy', 'Medium']
+
+		const data = query(collection(db, 'playerName'), where('id', '==', id));
+		const queryData = await getDocs(data);
+
+		const getData = queryData.docs.map((doc) => doc.data().level);
+
+		const checkEasy = arr.every(value => { 
+			return getData[0].includes(value);
+		});
+
+		if(checkEasy) { 
+			document.querySelector('.modalEndContainer').classList.toggle('modalEndContainer-show');
+		} 
+		return;
+	}
+
 	const deletePlayerCoord = async () => {
 		const coordRef = collection(db, 'player-selection');
 		const queryRef = query(coordRef, where('playerId', '==', id));
@@ -247,11 +282,12 @@ function Gameboard() {
 
 			
 			const time = (getEndTime[0].toMillis() - getStartTime[0].toMillis()) / 1000;
-
+			updateLevelCompleted(level.state.level)
 			deletePlayerFound();
 			
 			console.log(time);
 			console.log(level)
+			
 			await playerLeaderBoard(time, getName, level.state.level);
 
 			return console.log('game won');
@@ -265,6 +301,7 @@ function Gameboard() {
 	return (
 		<div className="gameboard-container">
 			<ModalStart />
+			<ModalEnd id={id}/>
 			<div>
 				<img
 					className={`${level.state.level}`}
